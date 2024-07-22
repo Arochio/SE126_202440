@@ -48,4 +48,4 @@ while restartProgram.lower() == "y":
 
     restartYN = input("\n\nWould you like to start again? [y/n]: ")
     restartProgram = decision(restartYN)
-print("Thank you! Goodbye!g")
+print("Thank you! Goodbye!")
