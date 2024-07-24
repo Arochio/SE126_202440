@@ -15,5 +15,3 @@
 
 #Main Code
 #------------------
-
-print("Hello World!")
