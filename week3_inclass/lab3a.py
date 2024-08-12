@@ -64,7 +64,7 @@ with open("week3_inclass/lab3a.csv") as csvfile:
             pcOs.append(i[7])
             pcYear.append(i[8])
         else:
-            pcSecondDisk.appent("-ERROR-")
+            pcSecondDisk.append("-ERROR-")
             pcOs.append(" @ ")
             pcYear.append(f"rec# {records}")
 
