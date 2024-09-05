@@ -1,8 +1,11 @@
 #Cooper Graves, Final Project, September 4, 2024
 #ASDF Game
 
+import csv
+from os import system
+
 mainControl = 0
-playerScore = 0
+playerScore = 500
 playerMult = 1
 playerStatic = 0
 multA = 1
@@ -14,24 +17,40 @@ staticS = 0
 staticD = 0
 staticF = 0
 shopControl = [0, 0, 0, 0]
+slotOne = "Empty"
+slotTwo = "Empty"
+slotThree = "Empty"
+recCount = 0
+saveControl = 0
+loadSlots = []
+savePrep = []
 
-print("\tWelcome to ASDF!\nStarting out is simple, all you have to do is type those letters: A, S, D, F.\nYou must type them in order and one at a time.\nEach time you type a letter you gain only one token (for now ;] )\n\n")
+with open("Final/saves.csv") as csvfile:
+            file = csv.reader(csvfile)
+            recCount = 0
+            for rec in file:
+                recCount += 1
+                print(f"Save slot {recCount}:\n\tTokens: {rec[0]}\n\tShop items purchased: {(rec[11] + rec[12] + rec[13] + rec[14])}")
+                loadSlots.append(rec)
 
-while mainControl != 4:
-    print("Menu: 1: Upgrades, 2: Trophies, 3: Save Game, 4: End Game")
+print("\tWelcome to ASDF!\nStarting out is simple, all you have to do is type those letters: A, S, D, F.\nYou must type them in order and one at a time.\nEach time you type a letter you gain only one token (for now ;] )")
+
+while mainControl != 5:
+    system("cls")
+    print("\n\nMenu: 1: Upgrades, 2: Trophies, 3: Load Game, 4: Save Game, 5: End Game")
     print(f"You can type A, S, D, F too!\t\tTokens: {playerScore}")
     mainControl = input(">")
     if mainControl.lower() == "a":
-        playerScore += (playerStatic + staticA) * playerMult * multA
+        playerScore += (1 + playerStatic + staticA) * playerMult * multA
         mainControl = 0
     elif mainControl.lower() == "s":
-        playerScore += (playerStatic + staticS) * playerMult * multS
+        playerScore += (1 + playerStatic + staticS) * playerMult * multS
         mainControl = 0
     elif mainControl.lower() == "d":
-        playerScore += (playerStatic + staticD) * playerMult * multD
+        playerScore += (1 + playerStatic + staticD) * playerMult * multD
         mainControl = 0
     elif mainControl.lower() == "f":
-        playerScore += (playerStatic + staticF) * playerMult * multF
+        playerScore += (1 + playerStatic + staticF) * playerMult * multF
         mainControl = 0
     elif int(mainControl) == 1:
         while mainControl == 1:
@@ -105,3 +124,66 @@ while mainControl != 4:
     elif int(mainControl) == 2:
         print("TROPHIES:") 
         #add trophies for items purchased from shop
+    elif int(mainControl) == 3:
+        file = csv.reader(csvfile)
+        loadChoice = int(input("Which save slot would you like to load?(0 to cancel) [0-3]: "))
+        if loadChoice > 0 and loadChoice <= 3:
+            playerScore = loadSLots[loadChoice][0]
+            playerMult = loadSLots[loadChoice][1]
+            playerStatic = loadSLots[loadChoice][2]
+            multA = loadSLots[loadChoice][3]
+            multS = loadSLots[loadChoice][4]
+            multD = loadSLots[loadChoice][5]
+            multF = loadSLots[loadChoice][6]
+            staticA = loadSLots[loadChoice][7]
+            staticS = loadSLots[loadChoice][8]
+            staticD = loadSLots[loadChoice][9]
+            staticF = loadSLots[loadChoice][10]
+            shopControl[0] = loadSLots[loadChoice][11]
+            shopControl[1] = loadSLots[loadChoice][12]
+            shopControl[2] = loadSLots[loadChoice][13]
+            shopControl[3] = loadSLots[loadChoice][14]
+            print("Load sucessful!")
+            mainControl = 0
+        else: mainControl = 0
+    elif int(mainControl) == 4:
+        print("Saves:")
+        with open("Final/saves.csv") as csvfile:
+            file = csv.reader(csvfile)
+            recCount = 0
+            for rec in file:
+                recCount += 1
+                shopItems = (rec[11] + rec[12] + rec[13] + rec[14])
+                print(f"Save slot {recCount}:\n\tTokens: {rec[0]}\n\tShop items purchased: {shopItems}")
+            saveChoice = int(input("\nWhich save slot would you like to save to?(0 to cancel)(!!!This will overwrite!!!) [0-3]: "))
+            if saveChoice > 0 and saveChoice <= 3:
+                savePrep.append(playerScore)
+                savePrep.append(playerMult)
+                savePrep.append(playerStatic)
+                savePrep.append(multA)
+                savePrep.append(multS)
+                savePrep.append(multD)
+                savePrep.append(multF)
+                savePrep.append(staticA)
+                savePrep.append(staticS)
+                savePrep.append(staticD)
+                savePrep.append(staticF)
+                savePrep.append(shopControl[0])
+                savePrep.append(shopControl[1])
+                savePrep.append(shopControl[2])
+                savePrep.append(shopControl[3])
+        with open("Final/saves.csv", 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            if saveChoice == 1:
+                writer.writerow(savePrep)
+                writer.writerow(loadSlots[1])
+                writer.writerow(loadSlots[2])
+            elif saveChoice == 2:
+                writer.writerow(loadSlots[0])
+                writer.writerow(savePrep)
+                writer.writerow(loadSlots[2])
+            elif saveChoice == 3:
+                writer.writerow(loadSlots[0])
+                writer.writerow(loadSlots[1])
+                writer.writerow(savePrep)
+        mainControl = 0
